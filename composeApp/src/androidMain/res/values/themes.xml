@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Launch theme: charcoal splash with the Pocketsum mark, then hands over to Theme.Pocketsum.Main. -->
+    <style name="Theme.Pocketsum" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand_charcoal</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/brand_charcoal</item>
+        <item name="postSplashScreenTheme">@style/Theme.Pocketsum.Main</item>
+    </style>
+
+    <style name="Theme.Pocketsum.Main" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/brand_surface_light</item>
+    </style>
+</resources>

@@ -1,0 +1,107 @@
+-- One row per account movement. A transfer is a linked pair of rows
+-- (TRANSFER_OUT on the source, TRANSFER_IN on the destination) sharing transferId.
+-- amount is always positive, in minor units (paise). date is epoch days.
+CREATE TABLE TransactionEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    accountId INTEGER NOT NULL REFERENCES Account(id),
+    categoryId INTEGER REFERENCES Category(id),
+    type TEXT NOT NULL,
+    amount INTEGER NOT NULL,
+    date INTEGER NOT NULL,
+    note TEXT,
+    transferId TEXT,
+    counterpartAccountId INTEGER REFERENCES Account(id),
+    recurringRuleId INTEGER,
+    createdAt INTEGER NOT NULL
+);
+
+CREATE INDEX idx_txn_account_date ON TransactionEntity(accountId, date);
+CREATE INDEX idx_txn_date ON TransactionEntity(date);
+CREATE INDEX idx_txn_transfer ON TransactionEntity(transferId);
+
+selectAll:
+SELECT * FROM TransactionEntity ORDER BY date DESC, id DESC;
+
+selectRecent:
+SELECT * FROM TransactionEntity ORDER BY date DESC, id DESC LIMIT ?;
+
+selectById:
+SELECT * FROM TransactionEntity WHERE id = ?;
+
+selectByTransferId:
+SELECT * FROM TransactionEntity WHERE transferId = ?;
+
+selectByAccount:
+SELECT * FROM TransactionEntity WHERE accountId = ? ORDER BY date DESC, id DESC;
+
+-- Filtered history. Nullable params act as "no filter".
+selectFiltered:
+SELECT * FROM TransactionEntity
+WHERE (:accountId IS NULL OR accountId = :accountId)
+  AND (:categoryId IS NULL OR categoryId = :categoryId)
+  AND (:fromDate IS NULL OR date >= :fromDate)
+  AND (:toDate IS NULL OR date <= :toDate)
+ORDER BY date DESC, id DESC;
+
+insert:
+INSERT INTO TransactionEntity(accountId, categoryId, type, amount, date, note, transferId, counterpartAccountId, recurringRuleId, createdAt)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+update:
+UPDATE TransactionEntity
+SET accountId = ?, categoryId = ?, type = ?, amount = ?, date = ?, note = ?
+WHERE id = ?;
+
+updateTransferLeg:
+UPDATE TransactionEntity
+SET accountId = ?, counterpartAccountId = ?, amount = ?, date = ?, note = ?
+WHERE id = ?;
+
+deleteById:
+DELETE FROM TransactionEntity WHERE id = ?;
+
+deleteByTransferId:
+DELETE FROM TransactionEntity WHERE transferId = ?;
+
+reassignCategory:
+UPDATE TransactionEntity SET categoryId = :newCategoryId WHERE categoryId = :oldCategoryId;
+
+countByAccount:
+SELECT COUNT(*) FROM TransactionEntity WHERE accountId = ? OR counterpartAccountId = ?;
+
+-- Monthly totals over active accounts only. Transfers excluded by type.
+selectTotalsBetween:
+SELECT
+    COALESCE(SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END), 0) AS income,
+    COALESCE(SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END), 0) AS expense
+FROM TransactionEntity t
+JOIN Account a ON a.id = t.accountId
+WHERE a.isArchived = 0 AND t.date >= :fromDate AND t.date <= :toDate;
+
+lastInsertRowId:
+SELECT last_insert_rowid();
+
+-- Spend (or income) per category in a period, active accounts only. Largest first.
+selectCategoryTotalsBetween:
+SELECT t.categoryId, SUM(t.amount) AS total
+FROM TransactionEntity t
+JOIN Account a ON a.id = t.accountId
+WHERE a.isArchived = 0 AND t.type = :type AND t.date >= :fromDate AND t.date <= :toDate
+GROUP BY t.categoryId
+ORDER BY total DESC;
+
+-- Income and expense per calendar month (date is epoch days). Transfers excluded by type.
+selectMonthlyTotalsBetween:
+SELECT
+    strftime('%Y-%m', t.date * 86400, 'unixepoch') AS ym,
+    COALESCE(SUM(CASE WHEN t.type = 'INCOME' THEN t.amount ELSE 0 END), 0) AS income,
+    COALESCE(SUM(CASE WHEN t.type = 'EXPENSE' THEN t.amount ELSE 0 END), 0) AS expense
+FROM TransactionEntity t
+JOIN Account a ON a.id = t.accountId
+WHERE a.isArchived = 0 AND t.date >= :fromDate AND t.date <= :toDate
+GROUP BY ym
+ORDER BY ym ASC;
+
+-- Rows in a period (for per-account or per-month detail views).
+selectBetween:
+SELECT * FROM TransactionEntity WHERE date >= :fromDate AND date <= :toDate ORDER BY date DESC, id DESC;

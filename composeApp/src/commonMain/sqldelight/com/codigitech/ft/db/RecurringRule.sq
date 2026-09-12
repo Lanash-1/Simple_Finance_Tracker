@@ -1,0 +1,54 @@
+CREATE TABLE RecurringRule (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    amount INTEGER NOT NULL,
+    accountId INTEGER NOT NULL REFERENCES Account(id),
+    categoryId INTEGER REFERENCES Category(id),
+    type TEXT NOT NULL,
+    frequency TEXT NOT NULL,
+    startDate INTEGER NOT NULL,
+    nextDueDate INTEGER NOT NULL,
+    isActive INTEGER NOT NULL DEFAULT 1,
+    note TEXT
+);
+
+selectAll:
+SELECT * FROM RecurringRule ORDER BY isActive DESC, nextDueDate ASC;
+
+selectById:
+SELECT * FROM RecurringRule WHERE id = ?;
+
+selectDue:
+SELECT * FROM RecurringRule WHERE isActive = 1 AND nextDueDate <= ? ORDER BY nextDueDate ASC;
+
+selectNextActiveDueDate:
+SELECT MIN(nextDueDate) FROM RecurringRule WHERE isActive = 1;
+
+insert:
+INSERT INTO RecurringRule(amount, accountId, categoryId, type, frequency, startDate, nextDueDate, isActive, note)
+VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?);
+
+update:
+UPDATE RecurringRule
+SET amount = ?, accountId = ?, categoryId = ?, type = ?, frequency = ?, startDate = ?, nextDueDate = ?, note = ?
+WHERE id = ?;
+
+setNextDueDate:
+UPDATE RecurringRule SET nextDueDate = ? WHERE id = ?;
+
+setActive:
+UPDATE RecurringRule SET isActive = ?, nextDueDate = ? WHERE id = ?;
+
+deleteById:
+DELETE FROM RecurringRule WHERE id = ?;
+
+pauseByAccount:
+UPDATE RecurringRule SET isActive = 0 WHERE accountId = ?;
+
+deleteByAccount:
+DELETE FROM RecurringRule WHERE accountId = ?;
+
+reassignCategory:
+UPDATE RecurringRule SET categoryId = :newCategoryId WHERE categoryId = :oldCategoryId;
+
+lastInsertRowId:
+SELECT last_insert_rowid();

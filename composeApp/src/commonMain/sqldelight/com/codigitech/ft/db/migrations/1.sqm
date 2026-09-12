@@ -1,0 +1,4 @@
+CREATE TABLE Budget (
+    categoryId INTEGER NOT NULL PRIMARY KEY REFERENCES Category(id),
+    monthlyLimit INTEGER NOT NULL
+);

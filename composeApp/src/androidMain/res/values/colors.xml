@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand tokens: see docs/branding/brand.md -->
+    <color name="brand_charcoal">#111614</color>
+    <color name="brand_emerald">#10B981</color>
+    <color name="brand_surface_light">#F7F8F7</color>
+    <color name="brand_surface_dark">#0B0F0E</color>
+    <color name="ic_launcher_background">@color/brand_charcoal</color>
+</resources>

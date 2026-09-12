@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="160" viewBox="0 0 720 160">
+  <!-- Pocketsum wordmark: mark (18..90 crop of the icon, 20% corner radius) + name in the system sans, SemiBold -->
+  <rect width="720" height="160" fill="#111614"/>
+  <g transform="translate(20,20) scale(1.6667) translate(-18,-18)">
+    <clipPath id="c"><rect x="18" y="18" width="72" height="72" rx="14.4"/></clipPath>
+    <g clip-path="url(#c)">
+      <rect width="108" height="108" fill="#1B211E"/>
+      <circle cx="54" cy="46" r="13" fill="#A7F3D0"/>
+      <path d="M52.5,35.5 H55.5 V40 H60 V43 H55.5 V47.5 H52.5 V43 H48 V40 H52.5 Z" fill="#111614"/>
+      <path d="M30,50 H78 V68 A12,12 0 0 1 66,80 H42 A12,12 0 0 1 30,68 Z" fill="#10B981"/>
+      <rect x="30" y="50" width="48" height="4.5" fill="#059669"/>
+    </g>
+  </g>
+  <text x="168" y="86" font-family="-apple-system, 'SF Pro Display', Roboto, 'Helvetica Neue', Arial, sans-serif" font-weight="600" font-size="64" fill="#F7F8F7" letter-spacing="-1">Pocket<tspan fill="#34D399">sum</tspan></text>
+  <text x="170" y="122" font-family="-apple-system, 'SF Pro Text', Roboto, 'Helvetica Neue', Arial, sans-serif" font-weight="400" font-size="24" fill="#B0C0BA">Simple, offline money tracking.</text>
+</svg>

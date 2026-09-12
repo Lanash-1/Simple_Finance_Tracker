@@ -1,0 +1,14 @@
+-- Monthly spending limit per expense category. Absence of a row means "no budget".
+CREATE TABLE Budget (
+    categoryId INTEGER NOT NULL PRIMARY KEY REFERENCES Category(id),
+    monthlyLimit INTEGER NOT NULL
+);
+
+selectAll:
+SELECT * FROM Budget;
+
+upsert:
+INSERT OR REPLACE INTO Budget(categoryId, monthlyLimit) VALUES (?, ?);
+
+deleteByCategory:
+DELETE FROM Budget WHERE categoryId = ?;
