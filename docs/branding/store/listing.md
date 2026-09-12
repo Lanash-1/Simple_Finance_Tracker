@@ -29,7 +29,26 @@ Set monthly budgets per category, see a six-month income vs expense chart, and f
 **History you can search**
 Filter by account, category and date range, search by note or amount, and undo an accidental delete.
 
+**Your data, yours to keep**
+Export every transaction as a CSV file whenever you like.
+
 Pocketsum is single-currency (₹) and built for people who want an honest, uncomplicated record of their money.
+
+## Release notes (en-IN, 500 max)
+
+```
+Pocketsum 1.0 – simple, offline money tracking.
+
+• Track cash, bank and card accounts side by side, in ₹
+• Log expenses, income and transfers in seconds
+• Recurring bills and salary post themselves on schedule
+• Monthly budgets, a six-month cash-flow chart and spending insights
+• Search and filter your history, undo accidental deletes
+• Lock the app with fingerprint, face or PIN
+• Export everything as CSV
+
+No account, no ads, no internet. Your data never leaves your phone.
+```
 
 ## Graphics checklist
 - [x] App icon 512×512 PNG: `icon-512.png`
