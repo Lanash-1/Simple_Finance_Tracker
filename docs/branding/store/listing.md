@@ -53,9 +53,9 @@ No account, no ads, no internet. Your data never leaves your phone.
 ## Graphics checklist
 - [x] App icon 512×512 PNG: `icon-512.png`
 - [x] Feature graphic 1024×500 PNG: `feature-graphic-1024x500.png`
-- [ ] Phone screenshots (2–8, 16:9 or 9:16, min 320 px): capture from the FinanceTracker AVD (emulator-5556) with
-      `~/Library/Android/sdk/platform-tools/adb -s emulator-5556 exec-out screencap -p > shot.png`. Suggested set: Home (dark), Add transaction, History with filters,
-      Insights, Accounts, Home (light).
+- [x] Phone screenshots: `shots/01..06-*.png`, 1080×1920 (9:16), framed from the raw 1080×2400 captures in `shots/raw/`
+      by `java docs/branding/store/shots/Frame.java docs/branding/store/shots`. Demo data only (seeded database, not real figures).
+      Re-capture with `~/Library/Android/sdk/platform-tools/adb -s emulator-5556 exec-out screencap -p > shots/raw/<name>.png`.
 - [ ] Optional 7" / 10" tablet screenshots.
 
 ## Data safety form
@@ -74,5 +74,5 @@ Full walkthrough: `play-store-publishing.md`.
 - [ ] Generate the upload keystore and fill in `keystore.properties`; enrol in Play App Signing on first upload.
 - [ ] Host the privacy policy at a public URL, paste it into the listing and into `Brand.PRIVACY_POLICY_URL`.
 - [ ] Fill in the contact email here and in `privacy-policy.md`.
-- [ ] Capture phone screenshots (see Graphics checklist).
+- [x] Phone screenshots captured and framed (see Graphics checklist).
 - [ ] Internal testing track first, then closed testing (12 testers / 14 days for new personal accounts), then production.
